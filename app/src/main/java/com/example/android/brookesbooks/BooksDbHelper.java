@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.android.brookesbooks.BooksContract.BookEntry;
+
 public class BooksDbHelper extends SQLiteOpenHelper {
 
     //Name of the database file
@@ -17,9 +19,18 @@ public class BooksDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //TODO create a string that contains the SQL statement to create the books table
-        //todo execute the SQL statement
+    public void onCreate(SQLiteDatabase db) {
+        //Create a string that contains the SQL statement to create the books table
+        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookEntry.TABLE_NAME+ " ("
+                + BookEntry.COLUMN_BOOK_ISBN + " INTEGER PRIMARY KEY NOT NULL,"
+                + BookEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL,"
+                + BookEntry.COLUMN_BOOK_PRICE + " INTEGER NOT NULL,"
+                + BookEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 0,"
+                + BookEntry.COLUMN_BOOK_SUPPLIER_NAME +" TEXT,"
+                + BookEntry.COLUMN_BOOK_SUPPLIER_PHONE + " INTEGER);";
+
+        //execute the SQL statement
+        db.execSQL(SQL_CREATE_BOOKS_TABLE);
     }
 
     @Override

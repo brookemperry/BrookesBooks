@@ -16,20 +16,20 @@ public final class BooksContract {
         public final static String COLUMN_BOOK_ISBN = "isbn";
 
         //Name of book. Type=TEXT
-        public final String COLUMN_BOOK_NAME = "name";
+        public final static String COLUMN_BOOK_NAME = "name";
 
         //Price of book. Type = INTEGER. $1.00 will be stored as 100--you have to multiply user input
         //by 100 to store and divide by 100 to display the price in the ui
-        public final String COLUMN_BOOK_PRICE = "price";
+        public final static String COLUMN_BOOK_PRICE = "price";
 
         //quantity of the particular book in stock. Type = INTEGER
-        public final String COLUMN_BOOK_QUANTITY = "quantity";
+        public final static String COLUMN_BOOK_QUANTITY = "quantity";
 
         //Name of the book supplier Type = TEXT
-        public final String COLUMN_BOOK_SUPPLIER_NAME = "supplier_name";
+        public final static String COLUMN_BOOK_SUPPLIER_NAME = "supplier_name";
 
         //Phone number for the book supplier. Type = INTEGER
-        public final String COLUMN_BOOK_SUPPLIER_PHONE = "supplier_phone";
+        public final static String COLUMN_BOOK_SUPPLIER_PHONE = "supplier_phone";
 
     }
 
