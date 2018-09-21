@@ -2,4 +2,8 @@
     <string name="app_name">Brooke\'s Books</string>
     <string name="insert_dummy_data">insert dummy data</string>
     <string name="delete_all_entries">delete all entries</string>
+    <string name="sample_isbn">9780307455161</string>
+    <string name="sample_book_name">Sag Harbor</string>
+    <string name="sample_supplier">Apex</string>
+    <string name="sample_phone">404-373-5555</string>
 </resources>
