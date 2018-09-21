@@ -12,7 +12,7 @@ public final class BooksContract {
 
         public final static String TABLE_NAME = "books";
 
-        //An ISBN number is a unique 13 digit identifier for all commercially printed books. Type INTEGER
+        //An ISBN number is a unique 13 digit identifier for all commercially printed books. Type I
         public final static String COLUMN_BOOK_ISBN = "isbn";
 
         //Name of book. Type=TEXT
