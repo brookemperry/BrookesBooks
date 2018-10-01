@@ -1,10 +1,10 @@
-package com.example.android.brookesbooks;
+package com.example.android.brookesbooks.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.brookesbooks.BooksContract.BookEntry;
+import com.example.android.brookesbooks.data.BooksContract.BookEntry;
 
 public class BooksDbHelper extends SQLiteOpenHelper {
 

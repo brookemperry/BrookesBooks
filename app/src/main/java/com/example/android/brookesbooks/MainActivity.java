@@ -5,15 +5,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.android.brookesbooks.BooksContract.BookEntry;
-import  com.example.android.brookesbooks.BooksDbHelper;
+import com.example.android.brookesbooks.data.BooksContract.BookEntry;
+import com.example.android.brookesbooks.data.BooksDbHelper;
 
 public class MainActivity extends AppCompatActivity {
     private BooksDbHelper mDbHelper;
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, getString(R.string.sample_phone));
 
         long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+        if(newRowId == -1){
+            Log.d(LOG_TAG,"Problem inserting data");
+        }else{
+            Log.d(LOG_TAG,newRowId + "Rows inserted successfully");
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
