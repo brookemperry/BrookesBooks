@@ -34,10 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayDatabaseInfo() {
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
 
         //Define a projection--the projection specifies which columny you use in the query
         String[] projection = {
+              BookEntry._ID,
               BookEntry.COLUMN_BOOK_ISBN,
               BookEntry.COLUMN_BOOK_NAME,
               BookEntry.COLUMN_BOOK_PRICE,
@@ -46,11 +47,9 @@ public class MainActivity extends AppCompatActivity {
               BookEntry.COLUMN_BOOK_SUPPLIER_PHONE };
 
         //Perform a query on the books table
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
                 null,
                 null,
                 null);
@@ -60,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         try{
 
 
-            //This finds the index of each column. You need this to itarate through each row
+            //This finds the index of each column. You need this to iterate through each row
+            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
             int isbnColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ISBN);
             int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
             int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Iterate through all the rows in the cursor (query performed)
             while (cursor.moveToNext()){
+                int currentId = cursor.getInt(idColumnIndex);
                 String currentIsbn = cursor.getString(isbnColumnIndex);
                 String currentName = cursor.getString(nameColumnIndex);
                 int currentPrice = cursor.getInt(priceColumnIndex);
@@ -78,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
                 //Display the the values of each row in the TextView
-                displayView.append(("\n" + currentIsbn + "-" +
+                displayView.append(("\n" + currentId + "-" +
+                    currentIsbn + "-" +
                     currentName + "-" +
                     currentPrice + "-" +
                     currentQuantity + "-" +
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, getString(R.string.sample_phone));
 
         long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+
         if(newRowId == -1){
             Log.d(LOG_TAG,"Problem inserting data");
         }else{
