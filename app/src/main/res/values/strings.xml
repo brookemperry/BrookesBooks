@@ -6,4 +6,11 @@
     <string name="sample_book_name">Sag Harbor</string>
     <string name="sample_supplier">Apex</string>
     <string name="sample_phone">404-373-5555</string>
+    <string name="isbn">ISBN</string>
+    <string name="price">Price</string>
+    <string name="supplier_name">Supplier Name</string>
+    <string name="book_name">Book Name</string>
+    <string name="supplier_phone_number">Supplier Phone Number</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

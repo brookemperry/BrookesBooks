@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
+
+import java.net.URI;
 
 public class BookProvider extends ContentProvider {
 
@@ -26,6 +29,7 @@ public class BookProvider extends ContentProvider {
      * It's common to use NO_MATCH as the input for this case.
      */
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final String LOG_TAG = BookProvider.class.getSimpleName() ;
 
     // Static initializer. This is run the first time anything is called from this class.
     static {
@@ -71,16 +75,41 @@ public class BookProvider extends ContentProvider {
         return cursor;
     }
 
-    @Nullable
+
+
+    /**
+     * Insert new data into the provider with the given ContentValues.
+     */
     @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return insertBook(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
     }
 
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+    //Insert a new book into the database. Return the new content URI for that row
+        private Uri insertBook(Uri uri, ContentValues values) {
+
+        //Get writable database
+        SQLiteDatabase database = mBooksDbHelper.getWritableDatabase();
+
+        // Insert a new pet into the pets database table with the given ContentValues
+        long id = database.insert(BookEntry.TABLE_NAME, null, values);
+
+        //Check to see if insertion failed
+        if (id== -1){
+
+
+            Log.e(LOG_TAG, "Failed to insert row for  " + uri);
+            return null;
+        }
+
+        // Once we know the ID of the new row in the table, return the new URI with the ID appended to the end of it
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
@@ -91,5 +120,11 @@ public class BookProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
+    }
+
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
     }
 }
