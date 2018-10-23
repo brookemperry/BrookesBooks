@@ -3,21 +3,25 @@ package com.example.android.brookesbooks;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
-import com.example.android.brookesbooks.data.BooksDbHelper;
 
-public class MainActivity extends AppCompatActivity {
-    private BooksDbHelper mDbHelper;
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int BOOK_LOADER = 0;
+    BooksCursorAdapter mCursorAdapter;
+
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -34,94 +38,38 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        ListView bookListView = findViewById(R.id.list);
 
-        //instantiate our subclass of SQLiteOpenHelper & pass in the context
-        mDbHelper = new BooksDbHelper(this);
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
+
+        //Set up an Adapter to create a list item for each row of data in the Cursor.
+        mCursorAdapter = new BooksCursorAdapter(this, null);
+        bookListView.setAdapter(mCursorAdapter);
+
+        //Start the loader
+        //noinspection deprecation
+        getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        displayDatabaseInfo();
     }
 
-    private void displayDatabaseInfo() {
-
-
-
-        //Define a projection--the projection specifies which columny you use in the query
-        String[] projection = {
-              BookEntry._ID,
-              BookEntry.COLUMN_BOOK_ISBN,
-              BookEntry.COLUMN_BOOK_NAME,
-              BookEntry.COLUMN_BOOK_PRICE,
-              BookEntry.COLUMN_BOOK_QUANTITY,
-              BookEntry.COLUMN_BOOK_SUPPLIER_NAME,
-              BookEntry.COLUMN_BOOK_SUPPLIER_PHONE };
-
-        //Perform a query on the books table
-        Cursor cursor = getContentResolver().query(
-                BookEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-
-        TextView displayView = findViewById(R.id.display_text_view);
-
-        try{
-
-
-            //This finds the index of each column. You need this to iterate through each row
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int isbnColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ISBN);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
-
-            //Iterate through all the rows in the cursor (query performed)
-            while (cursor.moveToNext()){
-                int currentId = cursor.getInt(idColumnIndex);
-                String currentIsbn = cursor.getString(isbnColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                //Display the the values of each row in the TextView
-                displayView.append(("\n" + currentId + "-" +
-                    currentIsbn + "-" +
-                    currentName + "-" +
-                    currentPrice + "-" +
-                    currentQuantity + "-" +
-                    currentSupplierName + "-" +
-                    currentSupplierPhone));
-            }
-        } finally {
-            cursor.close();
-        }
-    }
     // to insert harcoded data (hardcoded values need to be replaced when UI is added to get user input)
-    private void insertBook(){
-        SQLiteDatabase db =mDbHelper.getWritableDatabase();
+    private void insertBook() {
         ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN_BOOK_ISBN,getString(R.string.sample_isbn));
-        values.put(BookEntry.COLUMN_BOOK_NAME,getString(R.string.sample_book_name));
-        values.put (BookEntry.COLUMN_BOOK_PRICE, 1595);
+        values.put(BookEntry.COLUMN_BOOK_ISBN, getString(R.string.sample_isbn));
+        values.put(BookEntry.COLUMN_BOOK_NAME, getString(R.string.sample_book_name));
+        values.put(BookEntry.COLUMN_BOOK_PRICE, 1595);
         values.put(BookEntry.COLUMN_BOOK_QUANTITY, 5);
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, getString(R.string.sample_supplier));
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, getString(R.string.sample_phone));
 
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
-
-        if(newRowId == -1){
-            Log.d(LOG_TAG,"Problem inserting data");
-        }else{
-            Log.d(LOG_TAG,newRowId + "Rows inserted successfully");
-        }
+        //Insert a new row for Sag Harbor & get a new content URI
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
                 insertBook();
-                displayDatabaseInfo();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
@@ -146,5 +93,34 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_BOOK_NAME,
+                BookEntry.COLUMN_BOOK_PRICE,
+                BookEntry.COLUMN_BOOK_QUANTITY};
+        CursorLoader cursorLoader = new CursorLoader(this,
+                BookEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        //Swap the new cursor in (The framework will close the loader when we return
+        mCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        //Swap the new cursor in (The framework will close the loader when we return
+        mCursorAdapter.swapCursor(null);
     }
 }
