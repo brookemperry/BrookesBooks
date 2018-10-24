@@ -48,19 +48,23 @@ public class BooksCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView isbnTextView = (TextView) view.findViewById(R.id.isbn);
         TextView nameTextView = (TextView)view.findViewById(R.id.name);
+        TextView priceTextView = (TextView)view.findViewById(R.id.price);
+        TextView quantityTextView = (TextView)view.findViewById(R.id.quantity);
 
         //Find the columns of attributes that we're interested in
-        int isbnColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ISBN);
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
+        int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
+        int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
 
         //extract properties from cursor
-        String bookIsbn = cursor.getString(isbnColumnIndex);
         String bookName = cursor.getString(nameColumnIndex);
+        int bookPrice = cursor.getInt(priceColumnIndex);
+        int bookQuantity = cursor.getInt(quantityColumnIndex);
 
         //populate fields with extracted properties
-        isbnTextView.setText(bookIsbn);
         nameTextView.setText(bookName);
+        priceTextView.setText(bookPrice);
+        quantityTextView.setText(bookQuantity);
     }
 }
