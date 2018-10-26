@@ -59,8 +59,8 @@ public class BooksCursorAdapter extends CursorAdapter {
 
         //extract properties from cursor
         String bookName = cursor.getString(nameColumnIndex);
-        int bookPrice = cursor.getInt(priceColumnIndex);
-        int bookQuantity = cursor.getInt(quantityColumnIndex);
+        String bookPrice = cursor.getString(priceColumnIndex);
+        String bookQuantity = cursor.getString(quantityColumnIndex);
 
         //populate fields with extracted properties
         nameTextView.setText(bookName);

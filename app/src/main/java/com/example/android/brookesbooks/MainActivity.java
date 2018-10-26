@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-        ListView bookListView = findViewById(R.id.list);
+        ListView bookListView = (ListView)findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 BookEntry.COLUMN_BOOK_NAME,
                 BookEntry.COLUMN_BOOK_PRICE,
                 BookEntry.COLUMN_BOOK_QUANTITY};
+
         CursorLoader cursorLoader = new CursorLoader(this,
                 BookEntry.CONTENT_URI,
                 projection,
