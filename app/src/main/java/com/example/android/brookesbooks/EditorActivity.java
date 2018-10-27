@@ -1,26 +1,21 @@
 package com.example.android.brookesbooks;
 
 import android.content.ContentValues;
-import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.android.brookesbooks.data.BooksContract;
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
 
-public class EditorActivity extends AppCompatActivity{
+public class
+EditorActivity extends AppCompatActivity{
 
-   //EditText field for USBN
+   //EditText field for ISBN
     private EditText mIsbnEditText;
 
     //EditText field for name of book
@@ -52,7 +47,7 @@ public class EditorActivity extends AppCompatActivity{
         mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
     }
 
-     // Get user input from editor and save new pet into database.
+     // Get user input from editor and save new book into database.
      private void insertBook() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
@@ -74,7 +69,7 @@ public class EditorActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, supplierPhoneString);
 
-        // Insert a new row for pet in the database, returning the ID of that new row.
+        // Insert a new book into the provider & return content URI
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
 
