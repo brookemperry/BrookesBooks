@@ -1,5 +1,6 @@
 package com.example.android.brookesbooks;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
@@ -47,6 +49,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //Set up an Adapter to create a list item for each row of data in the Cursor.
         mCursorAdapter = new BooksCursorAdapter(this, null);
         bookListView.setAdapter(mCursorAdapter);
+
+        //Set up item click listener
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //this intent is to go to {@link EditorActivity}
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+                //create the content URI of the book that was clicked on by adding the id & set the
+                //URI on the intent (setData)
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                intent.setData(currentBookUri);
+                //launch the Editor Activity
+                startActivity(intent);
+            }
+        });
 
         //Start the loader
         //noinspection deprecation

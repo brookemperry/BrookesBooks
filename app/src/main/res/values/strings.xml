@@ -13,4 +13,6 @@
     <string name="supplier_phone_number">Supplier Phone Number</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="add_book_title">Add a Book</string>
+    <string name="edit_book_title">Edit Book</string>
 </resources>

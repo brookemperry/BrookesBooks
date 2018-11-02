@@ -1,6 +1,7 @@
 package com.example.android.brookesbooks;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -37,6 +38,17 @@ EditorActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        //Get the intent and figure out which intent was used to launch the activity
+        Intent intent = getIntent();
+        Uri currentBookUri = intent.getData();
+
+        //Determine whether we are creating a book (no URI) or editing an existing book (has URI)
+        if (currentBookUri == null) {
+            setTitle(R.string.add_book_title);
+        } else {
+            setTitle(R.string.edit_book_title);
+        }
 
         // Find all relevant views that we will need to read user input from
         mIsbnEditText = (EditText) findViewById(R.id.edit_isbn);
