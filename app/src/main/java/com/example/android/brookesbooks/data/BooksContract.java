@@ -3,7 +3,6 @@ package com.example.android.brookesbooks.data;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.content.ContentProvider;
 
 public final class BooksContract {
 
@@ -37,7 +36,7 @@ public final class BooksContract {
 
         public final static String _ID = BaseColumns._ID;
 
-        //An ISBN number is a unique 13 digit identifier for all commercially printed books. Type I
+        //An ISBN number is a unique 13 digit identifier for all commercially printed books.
         public final static String COLUMN_BOOK_ISBN = "isbn";
 
         //Name of book. Type=TEXT
