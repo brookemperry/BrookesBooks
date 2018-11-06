@@ -1,6 +1,7 @@
 package com.example.android.brookesbooks;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,10 +12,13 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -47,6 +51,19 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     //Content URI for existing book(null if it is a new book)
     private Uri mCurrentBookUri;
 
+    //Boolean flag that keeps track of whether the book has been edited (true) or not (false)
+    private boolean mBookHasChanged = false;
+
+    //OnTouchListener that listens for any touches on a view suggesting the user is making changes
+    private View.OnTouchListener mTouchlistener = new View.OnTouchListener(){
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mBookHasChanged = true;
+            return false;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +90,14 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mQuantityEditText = (EditText) findViewById(R.id.edit_quantity);
         mSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
         mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
+
+        //Set up OnTouchListeners on all the input fields to see if they have been modified
+        mIsbnEditText.setOnTouchListener(mTouchlistener);
+        mNameEditText.setOnTouchListener(mTouchlistener);
+        mPriceEditText.setOnTouchListener(mTouchlistener);
+        mQuantityEditText.setOnTouchListener(mTouchlistener);
+        mSupplierNameEditText.setOnTouchListener(mTouchlistener);
+        mSupplierPhoneEditText.setOnTouchListener(mTouchlistener);
     }
 
     // Get user input from editor and save a book into database.
@@ -170,11 +195,45 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // Navigate back to parent activity (CatalogActivity)
-                NavUtils.navigateUpFromSameTask(this);
+                // If the book hasn't changed, continue navigating to the patent activity
+                if (!mBookHasChanged){
+                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    return true;
+                }
+                //If there are unsaved changes, set up a dialog to warn the user
+                DialogInterface.OnClickListener discardButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //User clicked "Discard" button so navigate to the parent activity
+                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                            }
+                        };
+                showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //This method is called when the back button is pressed.
+    @Override
+    public void onBackPressed(){
+        //if the book hasn't changed, continue handling the back button press
+        if (!mBookHasChanged){
+            super.onBackPressed();
+            return;
+        }
+        //If there are unsaved changes, set up a dialog to warn the user.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //User clicked "Discard" button so close the current activity.
+                        finish();
+                    }
+                };
+        //Show dialog that there are unsaved changes
+        showUnsavedChangesDialog(discardButtonClickListener);
     }
 
     @NonNull
@@ -216,7 +275,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
 
             //Extract the value from the Cursor for the given column index
-            String isbn = cursor.getColumnName(isbnColumnIndex);
+            String isbn = cursor.getString(isbnColumnIndex);
             String name = cursor.getString(nameColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
@@ -242,5 +301,23 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mQuantityEditText.setText(0);
         mSupplierNameEditText.setText("");
         mSupplierPhoneEditText.setText("");
+    }
+
+    //Show a dialog that warns the user that there are unsaved changes that will be lost if they leave the editor
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Discard your changes and quit editing?");
+        builder.setPositiveButton("Discard changes", discardButtonClickListener);
+        builder.setNegativeButton("Continue editing", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null){
+                    dialog.dismiss();
+                }
+            }
+        });
+        //Create and show the Alert Dialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
