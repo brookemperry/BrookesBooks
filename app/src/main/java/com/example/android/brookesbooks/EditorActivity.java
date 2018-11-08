@@ -76,6 +76,8 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         //Determine whether we are creating a book (no URI) or editing an existing book (has URI)
         if (mCurrentBookUri == null) {
             setTitle(R.string.add_book_title);
+            //Invalidate the options menu so the "Delete" menu option is hidden
+            invalidateOptionsMenu();
         } else {
             setTitle(R.string.edit_book_title);
 
@@ -179,6 +181,16 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        super.onPrepareOptionsMenu(menu);
+        if (mCurrentBookUri == null){
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+            menuItem.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
@@ -191,7 +203,8 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                // Do nothing for now
+                //Responds to a click on the "Delete" menu option
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -214,6 +227,8 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     //This method is called when the back button is pressed.
     @Override
@@ -291,7 +306,31 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             mSupplierPhoneEditText.setText(supplier_phone);
         }
     }
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the book.
+                deleteBook();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
 
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         //If the loader is invalidated, clear the data from the input fields
@@ -302,7 +341,23 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mSupplierNameEditText.setText("");
         mSupplierPhoneEditText.setText("");
     }
+    private void deleteBook() {
+        // perform if there is an existing book
+        if (mCurrentBookUri != null) {
+            int rowsDeleted = getContentResolver().delete(mCurrentBookUri, null, null);
 
+            if (rowsDeleted == 0) {
+
+                Toast.makeText(this, getString(R.string.editor_delete_book_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_book_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        finish();
+    }
     //Show a dialog that warns the user that there are unsaved changes that will be lost if they leave the editor
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

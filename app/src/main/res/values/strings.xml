@@ -16,4 +16,8 @@
     <string name="add_book_title">Add a Book</string>
     <string name="edit_book_title">Edit Book</string>
     <string name="error_saving_book">Error with saving book</string>
+    <string name="editor_delete_book_successful">Book deleted</string>
+    <string name="editor_delete_book_failed">Error with deleting book</string>
+    <string name="delete_dialog_msg">Delete this book?</string>
+    <string name="cancel">Cancel</string>
 </resources>
