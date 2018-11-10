@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
 
@@ -47,10 +49,11 @@ public class BooksCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         TextView nameTextView = (TextView)view.findViewById(R.id.name);
         TextView priceTextView = (TextView)view.findViewById(R.id.price);
-        TextView quantityTextView = (TextView)view.findViewById(R.id.quantity);
+        final TextView quantityTextView = (TextView)view.findViewById(R.id.quantity);
+        Button saleButton = (Button)view.findViewById(R.id.sale_button);
 
         //Find the columns of attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
@@ -66,5 +69,19 @@ public class BooksCursorAdapter extends CursorAdapter {
         nameTextView.setText(bookName);
         priceTextView.setText(bookPrice);
         quantityTextView.setText(bookQuantity);
+        //Set a onClickListener for the sale button
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentQuantity = Integer.parseInt(quantityTextView.getText().toString());
+                //reviewed lessons for Just Java app!
+                if (currentQuantity == 0){
+                    Toast.makeText(context,"There are no books to sell", Toast.LENGTH_SHORT).show();
+                }else{
+                    currentQuantity = currentQuantity - 1;
+                    quantityTextView.setText(Integer.toString(currentQuantity));
+                }
+            }
+        });
     }
 }

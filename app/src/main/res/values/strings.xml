@@ -20,4 +20,6 @@
     <string name="editor_delete_book_failed">Error with deleting book</string>
     <string name="delete_dialog_msg">Delete this book?</string>
     <string name="cancel">Cancel</string>
+    <string name="quantity">quantity</string>
+    <string name="sale">Sale</string>
 </resources>
