@@ -42,8 +42,8 @@ public class BooksCursorAdapter extends CursorAdapter {
     }
 
     /**
-     * This method binds the pet data (in the current row pointed to by cursor) to the given
-     * list item layout. For example, the name for the current pet can be set on the name TextView
+     * This method binds the book data (in the current row pointed to by cursor) to the given
+     * list item layout. For example, the name for the current book can be set on the name TextView
      * in the list item layout.
      *
      * @param view    Existing view, returned earlier by newView() method
@@ -77,10 +77,11 @@ public class BooksCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View view) {
                 int currentQuantity = Integer.parseInt(quantityTextView.getText().toString());
-                //reviewed lessons for Just Java app!
+                //reviewed lessons for Just Java app! If there are 0 books, the user cannot sell more
                 if (currentQuantity == 0){
                     Toast.makeText(context,"There are no books to sell", Toast.LENGTH_SHORT).show();
                 }else{
+                    //If there are still books to sell, reduce the quantity by 1 each time
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
                     long id = Integer.parseInt(quantityTextView.getText().toString());
