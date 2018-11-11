@@ -53,10 +53,10 @@ public class BooksCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        TextView nameTextView = (TextView)view.findViewById(R.id.name);
-        TextView priceTextView = (TextView)view.findViewById(R.id.price);
-        final TextView quantityTextView = (TextView)view.findViewById(R.id.quantity);
-        Button saleButton = (Button)view.findViewById(R.id.sale_button);
+        TextView nameTextView = view.findViewById(R.id.name);
+        TextView priceTextView = view.findViewById(R.id.price);
+        final TextView quantityTextView = view.findViewById(R.id.quantity);
+        Button saleButton = view.findViewById(R.id.sale_button);
 
         //Find the columns of attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
@@ -85,9 +85,20 @@ public class BooksCursorAdapter extends CursorAdapter {
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
                     long id = Integer.parseInt(quantityTextView.getText().toString());
-                    Uri currentBook = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                    Uri mCurrentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
                     ContentValues values = new ContentValues();
                     values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());
+                    //change existing book
+                    int rowsAffected = context.getContentResolver().update(mCurrentBookUri,
+                            values,
+                            null,
+                            null);
+                    //Show a toast message showing if the update was successful
+                    if (rowsAffected == 0){
+                        Toast.makeText(context,"Update to quantity failed", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Quantity updated successfully.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

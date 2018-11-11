@@ -82,6 +82,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             setTitle(R.string.edit_book_title);
 
             //Initialize the loader
+            //noinspection deprecation
             getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
