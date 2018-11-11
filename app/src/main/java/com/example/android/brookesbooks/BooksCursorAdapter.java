@@ -85,20 +85,15 @@ public class BooksCursorAdapter extends CursorAdapter {
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
                     long id = Integer.parseInt(quantityTextView.getText().toString());
-                    Uri mCurrentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                    Uri currentBook = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
                     ContentValues values = new ContentValues();
-                    values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());
-                    //change existing book
-                    int rowsAffected = context.getContentResolver().update(mCurrentBookUri,
+                   values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());
+                    //update the database
+                     context.getContentResolver().update(currentBook,
                             values,
                             null,
                             null);
-                    //Show a toast message showing if the update was successful
-                    if (rowsAffected == 0){
-                        Toast.makeText(context,"Update to quantity failed", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(context, "Quantity updated successfully.", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
             }
         });
