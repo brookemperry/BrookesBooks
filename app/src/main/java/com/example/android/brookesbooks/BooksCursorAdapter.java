@@ -1,7 +1,10 @@
 package com.example.android.brookesbooks;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +83,10 @@ public class BooksCursorAdapter extends CursorAdapter {
                 }else{
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
+                    long id = Integer.parseInt(quantityTextView.getText().toString());
+                    Uri currentBook = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                    ContentValues values = new ContentValues();
+                    values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());
                 }
             }
         });
