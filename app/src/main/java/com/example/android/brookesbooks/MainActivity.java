@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_BOOK_ISBN, getString(R.string.sample_isbn));
         values.put(BookEntry.COLUMN_BOOK_NAME, getString(R.string.sample_book_name));
-        values.put(BookEntry.COLUMN_BOOK_PRICE, 1595);
+        values.put(BookEntry.COLUMN_BOOK_PRICE, 15);
         values.put(BookEntry.COLUMN_BOOK_QUANTITY, 5);
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, getString(R.string.sample_supplier));
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, getString(R.string.sample_phone));

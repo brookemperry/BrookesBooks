@@ -2,4 +2,5 @@
 <resources>
     <dimen name="text_padding">16dp</dimen>
     <dimen name="editor_layout_padding">16dp</dimen>
+    <dimen name="title_size">20sp</dimen>
 </resources>

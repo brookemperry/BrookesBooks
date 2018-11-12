@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
 
+//Additional help from https://developer.android.com/guide/components/intents-common#Phone &
+//https://www.youtube.com/watch?v=_NxJQcTZSxc
 public class
 EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -60,6 +62,9 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
 
     //Button that increases the quantity
     private Button plusButton;
+
+    //Button to open the phone dialer
+    private Button callButton;
 
     //OnTouchListener that listens for any touches on a view suggesting the user is making changes
     private View.OnTouchListener mTouchlistener = new View.OnTouchListener(){
@@ -104,6 +109,8 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
         minusButton = findViewById(R.id.minus_button);
         plusButton = findViewById(R.id.plus_button);
+        callButton = findViewById(R.id.call_button);
+
 
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +134,17 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 quantity = Integer.parseInt(mQuantityEditText.getText().toString());
                 quantity = quantity +1;
                 mQuantityEditText.setText(Integer.toString(quantity));
+            }
+        });
+
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
+                if (intent.resolveActivity(getPackageManager()) != null)
+                startActivity(intent);
+
             }
         });
 
@@ -158,6 +176,15 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 TextUtils.isEmpty(quantityString)&&
                 TextUtils.isEmpty(supplierNameString)&&
                 TextUtils.isEmpty(supplierPhoneString)){
+            return;
+        }
+        //Now check for invalid or missing responses & prompt user to correct before proceeding
+        if (mCurrentBookUri ==null && TextUtils.isEmpty(nameString )||
+                TextUtils.isEmpty(priceString)||
+                TextUtils.isEmpty(supplierNameString)||
+                TextUtils.isEmpty(supplierPhoneString)||
+                supplierPhoneString.length() != 10){
+            Toast.makeText(this, R.string.missing_or_incorrect_input, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -192,7 +219,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 Toast.makeText(this, R.string.error_saving_book, Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
-                Toast.makeText(this, "Book saved successfully: ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.book_saved_succesfully, Toast.LENGTH_SHORT).show();
             }
         }else{
             //change existing book
@@ -202,9 +229,9 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                     null);
             //Show a toast message showing if the update was successful
             if (rowsAffected == 0){
-                Toast.makeText(this,"Update to book failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,R.string.update_book_failed, Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(this, "Book updated successflly.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.book_updated_success, Toast.LENGTH_SHORT).show();
             }
         }
     }

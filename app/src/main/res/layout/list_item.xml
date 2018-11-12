@@ -5,24 +5,49 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/book_name"
+        android:paddingRight="@dimen/text_padding"
+        android:textAppearance="?android:textAppearanceLarge"/>
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Book Title"
         android:textAppearance="?android:textAppearanceLarge"/>
+</LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:paddingRight="@dimen/text_padding"
+            android:textAppearance="?android:textAppearanceMedium"/>
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceMedium"
         tools:text="@string/price"/>
+    </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quantity"
+        android:layout_weight="1"
+        android:textAppearance="?android:textAppearanceMedium"/>
     <TextView
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
