@@ -67,7 +67,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     private Button callButton;
 
     //OnTouchListener that listens for any touches on a view suggesting the user is making changes
-    private View.OnTouchListener mTouchlistener = new View.OnTouchListener(){
+    private View.OnTouchListener mTouchlistener = new View.OnTouchListener() {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -117,11 +117,11 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             public void onClick(View view) {
                 //get current value so that quantity doesn't default to 0
                 quantity = Integer.parseInt(mQuantityEditText.getText().toString());
-                if (quantity == 0){
+                if (quantity == 0) {
                     //don't allow the user to go to negative numbers
                     return;
-                }else{
-                    quantity = quantity -1;
+                } else {
+                    quantity = quantity - 1;
                     mQuantityEditText.setText(Integer.toString(quantity));
                 }
             }
@@ -131,8 +131,12 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             @Override
             public void onClick(View view) {
                 //get current value so that quantity doesn't default to 0
-                quantity = Integer.parseInt(mQuantityEditText.getText().toString());
-                quantity = quantity +1;
+                try {
+                    quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                } catch (NumberFormatException e) {
+                    quantity = 0;
+                }
+                quantity = quantity + 1;
                 mQuantityEditText.setText(Integer.toString(quantity));
             }
         });
@@ -143,7 +147,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
                 if (intent.resolveActivity(getPackageManager()) != null)
-                startActivity(intent);
+                    startActivity(intent);
 
             }
         });
@@ -165,26 +169,29 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
+        quantity = Integer.parseInt(quantityString);
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
 
         //Check to see if all the values are empty. If so, just return w/out saving a new book
         if (mCurrentBookUri == null &&
-                TextUtils.isEmpty(isbnString)&&
-                TextUtils.isEmpty(nameString)&&
-                TextUtils.isEmpty(priceString)&&
-                TextUtils.isEmpty(quantityString)&&
-                TextUtils.isEmpty(supplierNameString)&&
-                TextUtils.isEmpty(supplierPhoneString)){
+                TextUtils.isEmpty(isbnString) &&
+                TextUtils.isEmpty(nameString) &&
+                TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(quantityString) &&
+                TextUtils.isEmpty(supplierNameString) &&
+                TextUtils.isEmpty(supplierPhoneString)) {
             return;
         }
         //Now check for invalid or missing responses & prompt user to correct before proceeding
-        if (mCurrentBookUri ==null && TextUtils.isEmpty(nameString )||
-                TextUtils.isEmpty(priceString)||
-                TextUtils.isEmpty(supplierNameString)||
-                TextUtils.isEmpty(supplierPhoneString)||
-                supplierPhoneString.length() != 10){
-            Toast.makeText(this, R.string.missing_or_incorrect_input, Toast.LENGTH_SHORT).show();
+        if (mCurrentBookUri == null && TextUtils.isEmpty(nameString) ||
+                TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(supplierNameString) ||
+                TextUtils.isEmpty(supplierPhoneString) ||
+                supplierPhoneString.length() != 10) {
+            Toast.makeText(this, R.string.missing_or_incorrect_input, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, EditorActivity.class);
+            startActivity(intent);
             return;
         }
 
@@ -194,12 +201,12 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         values.put(BookEntry.COLUMN_BOOK_ISBN, isbnString);
         values.put(BookEntry.COLUMN_BOOK_NAME, nameString);
         int price = 0;
-        if (!TextUtils.isEmpty(priceString)){
+        if (!TextUtils.isEmpty(priceString)) {
             price = Integer.parseInt(priceString);
         }
         values.put(BookEntry.COLUMN_BOOK_PRICE, price);
         int quantity = 0;
-        if (!TextUtils.isEmpty(quantityString)){
+        if (!TextUtils.isEmpty(quantityString)) {
             quantity = Integer.parseInt(quantityString);
         }
         values.put(BookEntry.COLUMN_BOOK_QUANTITY, quantity);
@@ -221,16 +228,16 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
                 Toast.makeText(this, R.string.book_saved_succesfully, Toast.LENGTH_SHORT).show();
             }
-        }else{
+        } else {
             //change existing book
             int rowsAffected = getContentResolver().update(mCurrentBookUri,
                     values,
                     null,
                     null);
             //Show a toast message showing if the update was successful
-            if (rowsAffected == 0){
-                Toast.makeText(this,R.string.update_book_failed, Toast.LENGTH_SHORT).show();
-            }else{
+            if (rowsAffected == 0) {
+                Toast.makeText(this, R.string.update_book_failed, Toast.LENGTH_SHORT).show();
+            } else {
                 Toast.makeText(this, R.string.book_updated_success, Toast.LENGTH_SHORT).show();
             }
         }
@@ -245,9 +252,9 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mCurrentBookUri == null){
+        if (mCurrentBookUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }
@@ -273,7 +280,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
                 // If the book hasn't changed, continue navigating to the patent activity
-                if (!mBookHasChanged){
+                if (!mBookHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
                 }
@@ -293,12 +300,11 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     }
 
 
-
     //This method is called when the back button is pressed.
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         //if the book hasn't changed, continue handling the back button press
-        if (!mBookHasChanged){
+        if (!mBookHasChanged) {
             super.onBackPressed();
             return;
         }
@@ -370,6 +376,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             mSupplierPhoneEditText.setText(supplier_phone);
         }
     }
+
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
@@ -395,6 +402,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         //If the loader is invalidated, clear the data from the input fields
@@ -405,6 +413,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mSupplierNameEditText.setText("");
         mSupplierPhoneEditText.setText("");
     }
+
     private void deleteBook() {
         // perform if there is an existing book
         if (mCurrentBookUri != null) {
@@ -422,15 +431,16 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         }
         finish();
     }
+
     //Show a dialog that warns the user that there are unsaved changes that will be lost if they leave the editor
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Discard your changes and quit editing?");
-        builder.setPositiveButton("Discard changes", discardButtonClickListener);
-        builder.setNegativeButton("Continue editing", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.quit_editing);
+        builder.setPositiveButton(R.string.discard_changes, discardButtonClickListener);
+        builder.setNegativeButton(R.string.continue_editing, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                if (dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                 }
             }

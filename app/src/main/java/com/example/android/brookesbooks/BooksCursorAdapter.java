@@ -81,7 +81,7 @@ public class BooksCursorAdapter extends CursorAdapter {
                 int currentQuantity = Integer.parseInt(quantityTextView.getText().toString());
                 //reviewed lessons for Just Java app! If there are 0 books, the user cannot sell more
                 if (currentQuantity == 0){
-                    Toast.makeText(context,"There are no books to sell", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,R.string.no_books, Toast.LENGTH_SHORT).show();
                 }else{
                     //If there are still books to sell, reduce the quantity by 1 each time
                     currentQuantity = currentQuantity - 1;

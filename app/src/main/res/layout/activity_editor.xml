@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="@string/isbn"
+        android:textColor="@color/primary_text"
         android:layout_weight="5"
         android:id="@+id/edit_isbn"/>
     </LinearLayout>
@@ -40,6 +41,7 @@
     android:inputType="textCapWords"
     android:hint="@string/book_name"
         android:layout_weight="5"
+        android:textColor="@color/primary_text"
     android:id="@+id/edit_name"/>
    </LinearLayout>
 
@@ -60,6 +62,7 @@
         android:inputType="numberDecimal"
         android:layout_weight="5"
         android:hint="@string/price"
+        android:textColor="@color/primary_text"
         android:id="@+id/edit_price"/>
     </LinearLayout>
 
@@ -82,6 +85,7 @@
         android:layout_weight="4"
         android:layout_gravity="center_horizontal"
         android:hint="@string/quantity_edit_test"
+        android:textColor="@color/primary_text"
         android:id="@+id/edit_quantity"/>
 
         <Button
@@ -108,6 +112,7 @@
         android:layout_height="wrap_content"
         android:inputType="textCapWords"
             android:layout_weight="5"
+            android:textColor="@color/primary_text"
         android:hint="@string/supplier_name"
         android:id="@+id/edit_supplier_name"/>
     </LinearLayout>
@@ -128,6 +133,7 @@
         android:layout_height="wrap_content"
         android:inputType="phone"
             android:layout_weight="5"
+            android:textColor="@color/primary_text"
         android:hint="@string/supplier_phone"
         android:id="@+id/edit_supplier_phone_number"/>
     </LinearLayout>

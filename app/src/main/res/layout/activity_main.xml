@@ -44,7 +44,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             android:paddingTop="8dp"
-            android:text="let's add some books."
+            android:text="@string/let_s_add_some_books"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#A2AAB0"/>
     </RelativeLayout>
@@ -56,6 +56,7 @@
         app:srcCompat="?attr/colorAccent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_name"
         android:layout_margin="16dp"/>
 
 </RelativeLayout>

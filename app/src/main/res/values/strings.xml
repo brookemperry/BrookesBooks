@@ -28,8 +28,13 @@
     <string name="call_supplier_button">Call Supplier</string>
     <string name="price_label">Price $</string>
     <string name="supplier_phone">Supplier Phone #</string>
-    <string name="missing_or_incorrect_input">Please complete empty fields</string>
+    <string name="missing_or_incorrect_input">Please correct missing or invalid inputs.</string>
     <string name="book_saved_succesfully">Book saved successfully:</string>
     <string name="update_book_failed">Update to book failed</string>
     <string name="book_updated_success">Book updated successfully.</string>
+    <string name="let_s_add_some_books">let\'s add some books.</string>
+    <string name="no_books">There are no books to sell</string>
+    <string name="quit_editing">Discard your changes and quit editing?</string>
+    <string name="discard_changes">Discard changes</string>
+    <string name="continue_editing">Continue editing</string>
 </resources>
