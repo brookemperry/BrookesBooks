@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-        ListView bookListView = (ListView)findViewById(R.id.list);
+        ListView bookListView = (ListView) findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onStart();
     }
 
-    // to insert harcoded data (hardcoded values need to be replaced when UI is added to get user input)
+    // to insert sample data
     private void insertBook() {
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_BOOK_ISBN, getString(R.string.sample_isbn));
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //Insert a new row for Sag Harbor & get a new content URI
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_catalog.xml file.
@@ -116,9 +117,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void deleteAllBooks() {
-        // perform on sll existing pets
+        // perform on sll existing books
         int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
     }
 
     @NonNull

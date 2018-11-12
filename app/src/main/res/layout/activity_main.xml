@@ -19,7 +19,7 @@
         android:layout_centerInParent="true">
 
         <ImageView
-            android:id="@+id/empty_shelter_image"
+            android:id="@+id/empty_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -29,11 +29,11 @@
             android:id="@+id/empty_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/empty_shelter_image"
+            android:layout_below="@+id/empty_image"
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
-            android:paddingTop="16dp"
-            android:text="Something is missing"
+            android:paddingTop="@dimen/empty_view_text_top_padding"
+            android:text="@string/something_is_missing"
             android:textAppearance="?android:textAppearanceMedium"/>
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_below="@+id/empty_title_text"
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
-            android:paddingTop="8dp"
+            android:paddingTop="@dimen/empty_view_subtitle_padding_top"
             android:text="@string/let_s_add_some_books"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#A2AAB0"/>
@@ -57,6 +57,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_name"
-        android:layout_margin="16dp"/>
+        android:layout_margin="@dimen/fab_layout_margin"/>
 
 </RelativeLayout>

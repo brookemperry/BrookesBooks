@@ -37,4 +37,5 @@
     <string name="quit_editing">Discard your changes and quit editing?</string>
     <string name="discard_changes">Discard changes</string>
     <string name="continue_editing">Continue editing</string>
+    <string name="something_is_missing">Something is missing</string>
 </resources>

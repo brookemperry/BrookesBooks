@@ -25,8 +25,7 @@ import android.widget.Toast;
 
 import com.example.android.brookesbooks.data.BooksContract.BookEntry;
 
-//Additional help from https://developer.android.com/guide/components/intents-common#Phone &
-//https://www.youtube.com/watch?v=_NxJQcTZSxc
+//Additional help from https://developer.android.com/guide/components/intents-common#Phone
 public class
 EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -111,7 +110,6 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         plusButton = findViewById(R.id.plus_button);
         callButton = findViewById(R.id.call_button);
 
-
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,7 +146,6 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
                 intent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
                 if (intent.resolveActivity(getPackageManager()) != null)
                     startActivity(intent);
-
             }
         });
 
@@ -196,7 +193,7 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         }
 
         // Create a ContentValues object where column names are the keys,
-        // and pet attributes from the editor are the values.
+        // and book attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_BOOK_ISBN, isbnString);
         values.put(BookEntry.COLUMN_BOOK_NAME, nameString);
@@ -219,13 +216,12 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             // Insert a new book into the provider & return content URI
             Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
-
             // Show a toast message depending on whether or not the insertion was successful
             if (newUri == null) {
                 // If the row ID is -1, then there was an error with insertion.
                 Toast.makeText(this, R.string.error_saving_book, Toast.LENGTH_SHORT).show();
             } else {
-                // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                // Otherwise, the insertion was successful and we can display a toast.
                 Toast.makeText(this, R.string.book_saved_succesfully, Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -298,7 +294,6 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     //This method is called when the back button is pressed.
     @Override

@@ -50,7 +50,7 @@ public class BooksCursorAdapter extends CursorAdapter {
      * @param context app context
      * @param cursor  The cursor from which to get the data. The cursor is already moved to the
      *                correct row.
-     * Special thanks to Mentor Paulina G for all her help!
+     *                Special thanks to Mentor Paulina G for all her help!
      */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
@@ -63,7 +63,7 @@ public class BooksCursorAdapter extends CursorAdapter {
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
-        int idColumnIndex =cursor.getColumnIndex(BookEntry._ID);
+        int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
 
         //extract properties from cursor
         String bookName = cursor.getString(nameColumnIndex);
@@ -80,21 +80,20 @@ public class BooksCursorAdapter extends CursorAdapter {
             public void onClick(View view) {
                 int currentQuantity = Integer.parseInt(quantityTextView.getText().toString());
                 //reviewed lessons for Just Java app! If there are 0 books, the user cannot sell more
-                if (currentQuantity == 0){
-                    Toast.makeText(context,R.string.no_books, Toast.LENGTH_SHORT).show();
-                }else{
+                if (currentQuantity == 0) {
+                    Toast.makeText(context, R.string.no_books, Toast.LENGTH_SHORT).show();
+                } else {
                     //If there are still books to sell, reduce the quantity by 1 each time
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
                     Uri currentBook = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
                     ContentValues values = new ContentValues();
-                   values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());
+                    values.put(BookEntry.COLUMN_BOOK_QUANTITY, quantityTextView.getText().toString());
                     //update the database
-                     context.getContentResolver().update(currentBook,
+                    context.getContentResolver().update(currentBook,
                             values,
                             null,
                             null);
-
                 }
             }
         });
