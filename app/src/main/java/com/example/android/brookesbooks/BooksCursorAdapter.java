@@ -50,6 +50,7 @@ public class BooksCursorAdapter extends CursorAdapter {
      * @param context app context
      * @param cursor  The cursor from which to get the data. The cursor is already moved to the
      *                correct row.
+     * Special thanks to Mentor Paulina G for all her help!
      */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
@@ -62,12 +63,13 @@ public class BooksCursorAdapter extends CursorAdapter {
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
+        int idColumnIndex =cursor.getColumnIndex(BookEntry._ID);
 
         //extract properties from cursor
         String bookName = cursor.getString(nameColumnIndex);
         String bookPrice = cursor.getString(priceColumnIndex);
         String bookQuantity = cursor.getString(quantityColumnIndex);
-
+        final int id = cursor.getInt(idColumnIndex);
         //populate fields with extracted properties
         nameTextView.setText(bookName);
         priceTextView.setText(bookPrice);
@@ -84,7 +86,6 @@ public class BooksCursorAdapter extends CursorAdapter {
                     //If there are still books to sell, reduce the quantity by 1 each time
                     currentQuantity = currentQuantity - 1;
                     quantityTextView.setText(Integer.toString(currentQuantity));
-                    long id = Integer.parseInt(quantityTextView.getText().toString());
                     Uri currentBook = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
                     ContentValues values = new ContentValues();
                    values.put(BookEntry.COLUMN_BOOK_QUANTITY,quantityTextView.getText().toString());

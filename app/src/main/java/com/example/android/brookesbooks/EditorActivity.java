@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -54,6 +55,12 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
     //Boolean flag that keeps track of whether the book has been edited (true) or not (false)
     private boolean mBookHasChanged = false;
 
+    //Button that decreased the quantity
+    private Button minusButton;
+
+    //Button that increases the quantity
+    private Button plusButton;
+
     //OnTouchListener that listens for any touches on a view suggesting the user is making changes
     private View.OnTouchListener mTouchlistener = new View.OnTouchListener(){
 
@@ -63,6 +70,8 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
             return false;
         }
     };
+
+    int quantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +102,33 @@ EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallback
         mQuantityEditText = (EditText) findViewById(R.id.edit_quantity);
         mSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
         mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
+        minusButton = findViewById(R.id.minus_button);
+        plusButton = findViewById(R.id.plus_button);
+
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //get current value so that quantity doesn't default to 0
+                quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                if (quantity == 0){
+                    //don't allow the user to go to negative numbers
+                    return;
+                }else{
+                    quantity = quantity -1;
+                    mQuantityEditText.setText(Integer.toString(quantity));
+                }
+            }
+        });
+
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //get current value so that quantity doesn't default to 0
+                quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                quantity = quantity +1;
+                mQuantityEditText.setText(Integer.toString(quantity));
+            }
+        });
 
         //Set up OnTouchListeners on all the input fields to see if they have been modified
         mIsbnEditText.setOnTouchListener(mTouchlistener);
